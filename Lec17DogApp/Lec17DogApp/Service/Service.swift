@@ -75,10 +75,13 @@ extension DogsNetworkService: DogsNetworkServiceProtocol {
             } catch {
                 completion(nil)
             }
+            self.endRequest(at: indexPath, type: .imageLoad)
         }
         
+       
         // call
         let dataTask = session.dataTask(with: request, completionHandler: handler)
+        tasks[indexPath]?.imageLoad = dataTask
         dataTask.resume()
     }
     
@@ -141,6 +144,8 @@ extension DogsNetworkService: DogsNetworkServiceProtocol {
     }
     
     private func endRequest(at indexPath: IndexPath, type: CancelType) {
-        let taska = self.tasks[indexPath]
+        let task = self.tasks[indexPath]
+        task?.imageLoad = nil
+        task?.imageURLLoad = nil
     }
 }
